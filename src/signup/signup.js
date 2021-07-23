@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
 import {useHistory} from "react-router-dom"
-import register from "./handler"
+import register from "./signupHandler"
 const Signup = () => {
 
     const history = useHistory();
@@ -9,13 +9,15 @@ const Signup = () => {
     const [signupLoader, setSignupLoader] = useState(false);
     
     const onFinish = (values) => {
-        setSignupLoader
+        setSignupLoader(true)
         const res = register(values)
         res.then((success)=>{
+            setSignupLoader(false)
             message.success('User Registration Successfully', 5, onclose).then(()=>{
-                history.push("/login")
+                history.replace("/")
             });
         }).catch((err)=>{
+            setSignupLoader(false)
             message.error(err.message, 5)
         })
     };
@@ -108,7 +110,7 @@ const Signup = () => {
                     <Form.Item
 
                     >
-                        <Button type="primary" htmlType="submit">
+                        <Button loading={signupLoader} type="primary" htmlType="submit">
                             Signup
                         </Button>
                     </Form.Item>
