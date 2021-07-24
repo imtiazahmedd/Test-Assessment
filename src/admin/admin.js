@@ -6,8 +6,9 @@ import BookedList from "./bookedList"
 import FeedBackList from "./feedbackList"
 import {
   UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
+  BuildOutlined,
+  CommentOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import "./admin.css"
 import { firebase } from "../firebaseConfig";
@@ -42,13 +43,13 @@ const UserListing = () => {
             <Menu.Item key="user" icon={<UserOutlined />}>
                 Users
             </Menu.Item>
-            <Menu.Item key="parking_booked" icon={<VideoCameraOutlined />}>
+            <Menu.Item key="parking_booked" icon={<BuildOutlined/>}>
               Parking Booked
             </Menu.Item>
-            <Menu.Item key="feed_back" icon={<UploadOutlined />}>
+            <Menu.Item key="feed_back" icon={<CommentOutlined />}>
               Feedback
             </Menu.Item>
-            <Menu.Item key="logout" icon={<UploadOutlined />}>
+            <Menu.Item key="logout" icon={<LogoutOutlined />}>
               Logout
             </Menu.Item>
           </Menu>

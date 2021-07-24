@@ -19,39 +19,38 @@ const BookingSlot = (props) => {
     const onTimeChange = (date, dateString) => {
         setSelectedTime(dateString)
     }
-    console.log(selectedDate, "date")
-    console.log(selectedTime, "time")
 
     function disabledDate(current) {
         // Can not select days before today and today
         return current && current < moment().startOf('day');
     }
 
-    const bookingSubmit = () => {
-        const { userData } = props;
-        const currentUserId =  localStorage.getItem("userId")
-
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                console.log(user, "iiiiuuu")
-                firebase.database().ref('users/' + user.uid).once("value", snap => {
-                    console.log(snap.val(), "uuu")
-                })
-            }
+    const bookingSlot = () => {
+        return new Promise((resolve, reject)=>{
+            const { userData } = props;
+            const userEmail = firebase.auth().currentUser.email;
+            let slotRef = firebase.database().ref('slots/' + userData.id);
+            slotRef.set({slot_name: userData.slot_name, "email": userEmail, "is_booked": true, "date": selectedDate, "time_duration": selectedTime.toString() })
+            .then((res)=>{
+                resolve(res)
+            }).catch((err)=>{
+                reject(err)
+            })
         })
-       
-
-    // return firebase.database().ref('/users/' + currentUserId).once('value').then((snapshot) => {
-    //     console.log(snapshot.val(), "vvvvvv33")
-    // });
-
-
-        // let slotRef = firebase.database().ref('slots/' + userData.id);
-        // slotRef.set({slot_name: userData.slot_name, 'first_name': userData.first_name, 'last_name': userData.last_name, "email": userData.email, "is_booked": true, "date": selectedDate, "time_duration": selectedTime.toString() })
-
     }
 
+    const bookingSubmit = () => {
+        setSubmitLoader(true)
+        bookingSlot().then((success)=>{
+            message.success('Your parking slot has been booked Successfully', 5, onclose).then(()=>{
+                props.goBack()
+            });
+            setSubmitLoader(false)
+        }).catch((err)=>{
+            setSubmitLoader(false)
+        })
 
+    }
     return (
         <>
             <h1>Booking Slot</h1>
@@ -64,7 +63,7 @@ const BookingSlot = (props) => {
             <Button onClick={() => { props.goBack() }} type="primary" style={{ marginRight: "10px" }}>
                 Back
             </Button>
-            <Button onClick={() => { bookingSubmit() }} type="primary">
+            <Button loading={submitLoader} onClick={() => { bookingSubmit() }} type="primary">
                 Submit
             </Button>
         </>

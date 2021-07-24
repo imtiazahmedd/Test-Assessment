@@ -7,7 +7,8 @@ const register = (payload) => {
             userRef.push({
                 email: payload.email.toLowerCase(),
                 first_name: payload.first_name,
-                last_name: payload.last_name
+                last_name: payload.last_name,
+                uid: res.user.uid
             })
                 .then(() => {
                     resolve(res);

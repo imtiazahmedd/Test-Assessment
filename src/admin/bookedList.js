@@ -13,14 +13,14 @@ const { Sider, Content } = Layout;
 
 const BookedList = () => {
 
-    const [userListing, setUserListing] = useState(null);
+    const [slotListing, setSlotListing] = useState(null);
     const [data,setData] = useState([]);
 
     useEffect(() => {
         const dbRef = firebase.database().ref();
-        dbRef.child("users").get().then((snapshot) => {
+        dbRef.child("slots").get().then((snapshot) => {
           if (snapshot.exists()) {
-            setUserListing(snapshot.val())
+            setSlotListing(snapshot.val())
           } else {
             console.log("No data available");
           }
@@ -31,16 +31,18 @@ const BookedList = () => {
 
       const mappingTableData = () => {
           const data = [];
-            for(let key in userListing){
-                data.push(userListing[key])
+            for(let key in slotListing){
+              if(slotListing[key].email !== ""){
+                data.push(slotListing[key])
+              }
             }
             setData(data)
       }
 
       useEffect(()=>{
         mappingTableData()
-      },[userListing])
-    
+      },[slotListing])
+
 const columns = [
     {
       title: 'First Name',
@@ -57,10 +59,35 @@ const columns = [
       dataIndex: 'email',
       key: 'email',
     },
+    {
+      title: 'Slot',
+      dataIndex: 'slot_name',
+      key: 'slot_name',
+    },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time_duration',
+      key: 'time_duration',
+    },
+    {
+      title: 'Cancel',
+      dataIndex: 'time_duration',
+      key: 'time_duration',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'cancel',
+      render: text => <a onClick={(dataIndex)=>{console.log(dataIndex, "chla to gya")}}>Cancel</a>,
+    }
   ];
-  
+
     return (
-     <div>booked listed hre</div>
+      <Table columns={columns} dataSource={data} pagination={false} />
     );
 };
 

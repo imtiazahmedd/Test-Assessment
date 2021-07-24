@@ -6,11 +6,9 @@ export const ProtectedRoutes = ({component : Component, ...rest}) => {
     return( 
         <Route {...rest} render={
             (props) => {
-                console.log(auth(),"aiuiii")
                 if(auth()){
                     return <Component {...props}/>                                        
                 }else{
-                    console.log(props,"ppp")
                     return(
                         <Redirect to={
                             {

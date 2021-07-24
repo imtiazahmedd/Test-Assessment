@@ -12,7 +12,6 @@ import { firebase } from "../firebaseConfig";
 const { Sider, Content } = Layout;
 
 const UserList = () => {
-    console.log("uuuu")
     const [userListing, setUserListing] = useState(null);
     const [data,setData] = useState([]);
 
@@ -33,7 +32,9 @@ const UserList = () => {
       const mappingTableData = () => {
           const data = [];
             for(let key in userListing){
+              if(userListing[key].email !== "admin12@gmail.com"){
                 data.push(userListing[key])
+              }
             }
             setData(data)
       }
@@ -41,7 +42,6 @@ const UserList = () => {
       useEffect(()=>{
         mappingTableData()
       },[userListing])
-      console.log(userListing, "dd")
     
 const columns = [
     {

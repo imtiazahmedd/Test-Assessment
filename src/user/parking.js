@@ -8,9 +8,9 @@ import { firebase } from "../firebaseConfig";
 
 
 import {
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
+    SelectOutlined,
+    CommentOutlined,
+    LogoutOutlined,
 } from '@ant-design/icons';
 import "./user.css"
 
@@ -46,16 +46,13 @@ const Parking = () => {
             <Sider trigger={null} >
                 <div className="logo" />
                 <Menu onClick={handleMenuChange} theme="dark" mode="inline" defaultSelectedKeys={nav}>
-                    <Menu.Item key="slot" icon={<UserOutlined />}>
+                    <Menu.Item key="slot" icon={<SelectOutlined />}>
                         Available Slots
                     </Menu.Item>
-                    {/* <Menu.Item key="parking_booked" icon={<VideoCameraOutlined />}>
-              Book Slot
-            </Menu.Item> */}
-                    <Menu.Item key="feed_back" icon={<UploadOutlined />}>
+                    <Menu.Item key="feed_back" icon={<CommentOutlined />}>
                         Feedback
                     </Menu.Item>
-                    <Menu.Item key="logout" icon={<UploadOutlined />}>
+                    <Menu.Item key="logout" icon={<LogoutOutlined />}>
                         Logout
                     </Menu.Item>
                 </Menu>
@@ -69,7 +66,7 @@ const Parking = () => {
                         minHeight: 280,
                     }}
                 >
-                    {nav === "slot" && <ParkingSlot goToBooking={(el) => { goToBooking(el) }} />}
+                    {nav === "slot" && <ParkingSlot goToBooking={(el) => { goToBooking(el) }} userData={userpayload} />}
                     {nav === "parking_booked" && <BookingSlot goBack={() => { setNav("slot") }} userData={userpayload} />}
                     {nav === "feed_back" && <Feedback />}
                 </Content>

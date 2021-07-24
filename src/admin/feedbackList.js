@@ -13,14 +13,14 @@ const { Sider, Content } = Layout;
 
 const FeedBackList = () => {
 
-    const [userListing, setUserListing] = useState(null);
+    const [feedbackListing, setFeedbackListing] = useState(null);
     const [data,setData] = useState([]);
 
     useEffect(() => {
         const dbRef = firebase.database().ref();
-        dbRef.child("users").get().then((snapshot) => {
+        dbRef.child("feedback").get().then((snapshot) => {
           if (snapshot.exists()) {
-            setUserListing(snapshot.val())
+            setFeedbackListing(snapshot.val())
           } else {
             console.log("No data available");
           }
@@ -31,36 +31,31 @@ const FeedBackList = () => {
 
       const mappingTableData = () => {
           const data = [];
-            for(let key in userListing){
-                data.push(userListing[key])
+            for(let key in feedbackListing){
+                data.push(feedbackListing[key])
             }
             setData(data)
       }
 
       useEffect(()=>{
         mappingTableData()
-      },[userListing])
-    
+      },[feedbackListing])
+    console.log(data, "ddd")
 const columns = [
-    {
-      title: 'First Name',
-      dataIndex: 'first_name',
-      key: 'first_name',
-    },
-    {
-      title: 'Last Name',
-      dataIndex: 'last_name',
-      key: 'last_name',
-    },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
+    {
+      title: 'Feedback',
+      dataIndex: 'feed_back',
+      key: 'feed_back',
+    },
   ];
   
     return (
-     <div>ffffffff listed hre</div>
+      <Table columns={columns} dataSource={data} />
     );
 };
 

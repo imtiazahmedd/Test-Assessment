@@ -1,22 +1,23 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
-import {useHistory} from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import register from "./handler"
+import "./signup.css"
 const Signup = () => {
 
     const history = useHistory();
 
     const [signupLoader, setSignupLoader] = useState(false);
-    
+
     const onFinish = (values) => {
         setSignupLoader(true)
         const res = register(values)
-        res.then((success)=>{
+        res.then((success) => {
             setSignupLoader(false)
-            message.success('User Registration Successfully', 5, onclose).then(()=>{
-                history.push("/login")
+            message.success('User Registration Successfully', 5, onclose).then(() => {
+                history.push("/")
             });
-        }).catch((err)=>{
+        }).catch((err) => {
             setSignupLoader(false)
             message.error(err.message, 5)
         })
@@ -33,9 +34,9 @@ const Signup = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <h1>Singup</h1>
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={6}>
+                    <h1 className="heading">User Registration</h1>
                     <Form.Item
                         label="First Name"
                         name="first_name"
@@ -51,7 +52,7 @@ const Signup = () => {
                 </Col>
             </Row>
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={6}>
                     <Form.Item
                         label="Last Name"
                         name="last_name"
@@ -67,7 +68,7 @@ const Signup = () => {
                 </Col>
             </Row>
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={6}>
                     <Form.Item
                         label="Email"
                         name="email"
@@ -88,7 +89,7 @@ const Signup = () => {
             </Row>
 
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={6}>
 
                     <Form.Item
                         label="Password"
@@ -104,9 +105,14 @@ const Signup = () => {
                     </Form.Item>
                 </Col>
             </Row>
-
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={6}>
+                    <Link to="/">Already have an account ?</Link>
+
+                </Col>
+            </Row>
+            <Row>
+                <Col span={12} offset={16}>
                     <Form.Item
 
                     >
