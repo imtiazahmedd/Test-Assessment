@@ -14,6 +14,7 @@ const Login = () => {
         setLoginLoader(true)
         const res = login(values)
         res.then((success)=>{
+            console.log(success, "ssss")
             localStorage.setItem("userId", success.user.uid)
             setLoginLoader(false)
             message.success('Login Successfully', 1, onclose).then(()=>{

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Form, Input, Button, Row, Col, message } from 'antd';
 import {useHistory} from "react-router-dom"
-import register from "./signupHandler"
+import register from "./handler"
 const Signup = () => {
 
     const history = useHistory();
@@ -14,7 +14,7 @@ const Signup = () => {
         res.then((success)=>{
             setSignupLoader(false)
             message.success('User Registration Successfully', 5, onclose).then(()=>{
-                history.replace("/")
+                history.push("/login")
             });
         }).catch((err)=>{
             setSignupLoader(false)

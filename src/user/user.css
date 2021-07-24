@@ -19,3 +19,14 @@
   .site-layout .site-layout-background {
     background: #fff;
   }
+
+  .slot-booked {
+    width: 500px;
+    cursor: no-drop;
+    background-color: #ffffa1;
+  }
+
+  .slot-empty {
+    width: 500px;
+    cursor: grab;
+  }

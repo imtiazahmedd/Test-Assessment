@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, message } from 'antd';
+import { useHistory } from 'react-router';
 import UserList from "./userList"
 import BookedList from "./bookedList"
 import FeedBackList from "./feedbackList"
@@ -9,16 +10,30 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import "./admin.css"
+import { firebase } from "../firebaseConfig";
 
 const { Sider, Content } = Layout;
 
 const UserListing = () => {
 
-  const [nav, setNav] = useState(["user"])
+  const history = useHistory()
+
+  const [nav, setNav] = useState("user")
 
   const handleMenuChange = (e) => {
-    setNav([e])
-  }
+    console.log(e,"euuuu")
+    if(e.key === "logout"){
+      firebase.auth().signOut().then(() => {
+          history.replace("/")
+          localStorage.clear();
+        }).catch((error) => {
+          message.success(error, 5)
+        });
+    }else{
+        setNav(e.key)
+    }
+}
+
     return (
        <Layout  style={{ minHeight: '100vh' }}>
         <Sider trigger={null} >
@@ -33,6 +48,9 @@ const UserListing = () => {
             <Menu.Item key="feed_back" icon={<UploadOutlined />}>
               Feedback
             </Menu.Item>
+            <Menu.Item key="logout" icon={<UploadOutlined />}>
+              Logout
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -44,11 +62,11 @@ const UserListing = () => {
               minHeight: 280,
             }}
           >
-            {nav[0].key === "user" && <UserList />}
+            {nav === "user" && <UserList />}
 
-            {nav[0].key === "parking_booked" && <BookedList />}
+            {nav === "parking_booked" && <BookedList />}
 
-            {nav[0].key === "feed_back" && <FeedBackList />}
+            {nav === "feed_back" && <FeedBackList />}
           </Content>
         </Layout>
       </Layout>
