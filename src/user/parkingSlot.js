@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom"
-import { useHistory } from "react-router-dom"
-import { Form, Input, Button, Row, Col, message, Space, Card } from 'antd';
+import { Button, message, Space, Card } from 'antd';
 import { firebase } from "../firebaseConfig";
 import "./user.css"
 
@@ -9,19 +7,6 @@ import "./user.css"
 const ParkingSlot = (props) => {
 
   const [slotList, setSlotList] = useState([]);
-  const [cancelLoading, setCancelLoading] = useState(false)
-
-  // useEffect(()=>{
-  //     const userRef = firebase.database().ref("slots");
-  //     userRef.push({
-  //           is_booked: false,
-  //           first_name: "",
-  //           last_name: "",
-  //           email: "",
-  //           date: "",
-  //           time_duration: ""
-  //     })
-  // },[])
 
   const navigateToBooking = (el) => {
     if(!el.is_booked){
@@ -46,7 +31,7 @@ const ParkingSlot = (props) => {
     const dbRef = firebase.database().ref();
     dbRef.child("slots").get().then((snapshot) => {
       for (let key in snapshot.val()) {
-        const obj = {...snapshot.val()[key], id: key, cancelLoading: false}
+        const obj = {...snapshot.val()[key], id: key}
         data.push(obj)
       }
       setSlotList(data)
@@ -62,17 +47,16 @@ const ParkingSlot = (props) => {
 
 
   const cancelBooking = (params) => {
-    setCancelLoading(true)
     cancelSlot(params).then((success)=>{
         message.success('Your parking slot has been canceled Successfully', 5)
-        setCancelLoading(false)
         getSlotListing()
     }).catch((err)=>{
-        setCancelLoading(false)
+        console.log(err)
     })
   }
 
   const renderSlotList = () => {
+    const currentUserId = localStorage.getItem("userId")
     return slotList?.map((el) => {
       return (
         <div style={{display: 'flex'}}>
@@ -85,7 +69,7 @@ const ParkingSlot = (props) => {
               </div>
           }
         </Card>
-        <Button loading={cancelLoading} onClick={()=>{cancelBooking(el)}} type="primary" disabled={el.is_booked ? false : true} style={{height: "40px", marginLeft: "20px"}}>Cancellation</Button>
+        <Button onClick={()=>{cancelBooking(el)}} type="primary" disabled={el.is_booked && currentUserId === el.uid ? false : true} style={{height: "40px", marginLeft: "20px"}}>Cancellation</Button>
         </div>
       )
     })

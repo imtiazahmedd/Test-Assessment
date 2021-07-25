@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom"
-import { useHistory } from "react-router-dom"
-import { Form, Input, Button, Row, Col, message, Space, Card, DatePicker, TimePicker } from 'antd';
+import React, { useState } from 'react';
+import { Button, message, DatePicker } from 'antd';
 import { firebase } from "../firebaseConfig";
+import RangePicker from "./rangePicker"
+import "antd/dist/antd.css";
 import moment from 'moment';
 
 
 const BookingSlot = (props) => {
 
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedTime, setSelectedTime] = useState(null);
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
     const [submitLoader, setSubmitLoader] = useState(false);
+
 
     const onDateChange = (date, dateString) => {
         setSelectedDate(dateString)
-    }
-
-    const onTimeChange = (date, dateString) => {
-        setSelectedTime(dateString)
     }
 
     function disabledDate(current) {
@@ -26,31 +24,34 @@ const BookingSlot = (props) => {
     }
 
     const bookingSlot = () => {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             const { userData } = props;
-            const userEmail = firebase.auth().currentUser.email;
+            const currentUser = firebase.auth().currentUser;
+            const userEmail = currentUser.email;
+            const userId = currentUser.uid;
             let slotRef = firebase.database().ref('slots/' + userData.id);
-            slotRef.set({slot_name: userData.slot_name, "email": userEmail, "is_booked": true, "date": selectedDate, "time_duration": selectedTime.toString() })
-            .then((res)=>{
-                resolve(res)
-            }).catch((err)=>{
-                reject(err)
-            })
+            slotRef.set({ slot_name: userData.slot_name, "email": userEmail, "is_booked": true, "date": selectedDate, "time_duration": startTime + "," + endTime, uid: userId })
+                .then((res) => {
+                    resolve(res)
+                }).catch((err) => {
+                    reject(err)
+                })
         })
     }
 
     const bookingSubmit = () => {
         setSubmitLoader(true)
-        bookingSlot().then((success)=>{
-            message.success('Your parking slot has been booked Successfully', 5, onclose).then(()=>{
+        bookingSlot().then((success) => {
+            message.success('Your parking slot has been booked Successfully', 5, onclose).then(() => {
                 props.goBack()
             });
             setSubmitLoader(false)
-        }).catch((err)=>{
+        }).catch((err) => {
             setSubmitLoader(false)
         })
 
     }
+
     return (
         <>
             <h1>Booking Slot</h1>
@@ -58,12 +59,12 @@ const BookingSlot = (props) => {
                 <DatePicker style={{ width: "500px", marginBottom: "40px", marginTop: "10px" }} disabledDate={disabledDate} onChange={onDateChange} />
             </div>
             <div>
-                <TimePicker.RangePicker style={{ width: "500px", marginBottom: "20px" }} format="HH: mm" onChange={onTimeChange} />
+                <RangePicker startTime={(sTime) => { setStartTime(sTime) }} endTime={(eTime) => { setEndTime(eTime) }} />
             </div>
             <Button onClick={() => { props.goBack() }} type="primary" style={{ marginRight: "10px" }}>
                 Back
             </Button>
-            <Button loading={submitLoader} onClick={() => { bookingSubmit() }} type="primary">
+            <Button disabled={selectedDate && startTime && endTime ? false : true} loading={submitLoader} onClick={() => { bookingSubmit() }} type="primary">
                 Submit
             </Button>
         </>

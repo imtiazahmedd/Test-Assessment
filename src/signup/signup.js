@@ -36,7 +36,7 @@ const Signup = () => {
         >
             <Row>
                 <Col span={12} offset={6}>
-                    <h1 className="heading">User Registration</h1>
+                    <h1 className="heading">Registration</h1>
                     <Form.Item
                         label="First Name"
                         name="first_name"
