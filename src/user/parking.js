@@ -6,7 +6,6 @@ import Feedback from "./feedback"
 import BookingSlot from "./bookingSlot"
 import { firebase } from "../firebaseConfig";
 
-
 import {
     SelectOutlined,
     CommentOutlined,

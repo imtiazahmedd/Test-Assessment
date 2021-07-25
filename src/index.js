@@ -7,14 +7,15 @@ import UserListing from "./admin/admin"
 import Parking from "./user/parking"
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { ProtectedRoutes } from './protected.route'
+import auth from './auth'
 
 const protectedRoutes = [
     {
-        path: "/admin/user-listing",
+        path: "/admin-module/:id",
         component: UserListing
     },
     {
-        path: "/user/parking-slots",
+        path: "/user-module/:id",
         component: Parking
     }
 ]

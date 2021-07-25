@@ -7,26 +7,26 @@ import "./user.css"
 
 const RangePicker = (props) => {
 
-    const [startOpen, setStartOpen] = useState(false);
-    const [endOpen, setEndOpen] = useState(false);
-    const [startValue, setStartValue] = useState();
-    const [endValue, setEndValue] = useState();
+  const [startOpen, setStartOpen] = useState(false);
+  const [endOpen, setEndOpen] = useState(false);
+  const [startValue, setStartValue] = useState();
+  const [endValue, setEndValue] = useState();
 
 
-    
-    const changeStartTime = (e)=> {
-        setStartValue(e);
-        props.startTime( moment(e).format("hh:mm"))
-    }
-    
-    const changeEndTime = (e)=> {
-        setEndValue(e);
-        props.endTime( moment(e).format("hh:mm"))
-    }
 
-    return (
-      <>
-       <TimePicker
+  const changeStartTime = (e) => {
+    setStartValue(e);
+    props.startTime(moment(e).format("hh:mm"))
+  }
+
+  const changeEndTime = (e) => {
+    setEndValue(e);
+    props.endTime(moment(e).format("hh:mm"))
+  }
+
+  return (
+    <>
+      <TimePicker
         style={{ width: "240px", marginBottom: "40px", marginTop: "10px" }}
         format="hh:mm"
         placeholder="Select Start Time"
@@ -49,7 +49,7 @@ const RangePicker = (props) => {
           const maxMinutes =
             endValue && startSelectedHour >= endValue.hours()
               ? endValue.minutes()
-              : 60; 
+              : 60;
 
           return Array.from({ length: 60 }, (v, k) => k).filter(
             minutes => minutes < minMinutes || minutes > maxMinutes
@@ -74,7 +74,7 @@ const RangePicker = (props) => {
       />
       &nbsp; - &nbsp;
       <TimePicker
-       format="hh:mm"
+        format="hh:mm"
         style={{ width: "240px", marginBottom: "40px", marginTop: "10px" }}
         placeholder="Select End Time"
         hideDisabledOptions
@@ -117,8 +117,8 @@ const RangePicker = (props) => {
           </Button>
         )}
       />
-      </>
-    );
+    </>
+  );
 };
 
 export default RangePicker

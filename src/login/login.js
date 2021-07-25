@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Link} from "react-router-dom"
-import {useHistory} from "react-router-dom"
+import React, { useState } from 'react';
+import { Link, useLocation } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { Form, Input, Button, Row, Col, message } from 'antd';
 import login from "./loginHandler"
 import "./login.css"
@@ -8,24 +8,27 @@ import "./login.css"
 const Login = () => {
 
     const history = useHistory();
+    const location = useLocation()
 
     const [loginLoader, setLoginLoader] = useState(false);
 
     const onFinish = (values) => {
         setLoginLoader(true)
         const res = login(values)
-        res.then((success)=>{
-            console.log(success, "ssss")
+        res.then((success) => {
             localStorage.setItem("userId", success.user.uid)
             setLoginLoader(false)
-            message.success('Login Successfully', 1, onclose).then(()=>{
-                if(values.email === "admin12@gmail.com"){
-                    history.replace("/admin/user-listing")
-                }else{
-                    history.replace("/user/parking-slots")
+            window.addEventListener("popstate", () => {
+                window.history.go(2);
+              });
+            message.success('Login Successfully', 1, onclose).then(() => {
+                if (values.email === "admin12@gmail.com") {
+                    history.replace(`admin-module/${success.user.uid}`)
+                } else {
+                    history.replace(`user-module/${success.user.uid}`)
                 }
             });
-        }).catch((err)=>{
+        }).catch((err) => {
             setLoginLoader(false)
             message.error(err.message, 5)
         })
@@ -82,8 +85,8 @@ const Login = () => {
             </Row>
             <Row>
                 <Col span={12} offset={6}>
-            <Link to="/signup">Don't have an account?</Link>
-            </Col>
+                    <Link to="/signup">Don't have an account?</Link>
+                </Col>
             </Row>
             <Row>
                 <Col span={12} offset={16}>

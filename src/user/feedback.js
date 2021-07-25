@@ -12,9 +12,10 @@ const Feedback = () => {
     const onFinish = (values) => {
         setFeedbackLoader(true)
         return new Promise((resolve, reject) => {
-            const userEmail = firebase.auth().currentUser.email;
+            const currentUser = firebase.auth().currentUser
+            const userEmail = currentUser.email;
+            const userId = currentUser.uid;
             let feedbackRef = firebase.database().ref('feedback');
-            let userId = localStorage.getItem("userId")
             feedbackRef.push({ email: userEmail, "feed_back": values.feedback, uid: userId })
                 .then((res) => {
                     resolve(res)
@@ -48,16 +49,15 @@ const Feedback = () => {
                             },
                         ]}
                     >
-                        <TextArea placeholder="Submit your feedback" autoSize={{ minRows: 8, maxRows: 5 }} showCount maxLength={100} />
+                        <TextArea placeholder="Submit your feedback" autoSize={{ minRows: 8 }} showCount maxLength={100} />
 
                     </Form.Item>
 
                 </Col>
             </Row>
             <Row>
-                <Col span={12}>
+                <Col span={12} offset={10}>
                     <Form.Item
-
                     >
                         <Button loading={feedbackLoader} type="primary" htmlType="submit">
                             submit
