@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom"
 import { useHistory } from "react-router-dom"
-import { Form, Input, Button, Row, Col, message } from 'antd';
-import login from "./loginHandler"
+import { Form, Input, Button, Row, Col, message, Alert } from 'antd';
 import "./login.css"
+const axios = require('axios');
 
 const Login = () => {
 
@@ -11,27 +11,29 @@ const Login = () => {
     const location = useLocation()
 
     const [loginLoader, setLoginLoader] = useState(false);
+    const [error, setError] = useState("");
+
 
     const onFinish = (values) => {
-        setLoginLoader(true)
-        const res = login(values)
-        res.then((success) => {
-            localStorage.setItem("userId", success.user.uid)
-            setLoginLoader(false)
-            window.addEventListener("popstate", () => {
-                window.history.go(2);
-              });
-            message.success('Login Successfully', 1, onclose).then(() => {
-                if (values.email === "admin12@gmail.com") {
-                    history.replace(`admin-module/${success.user.uid}`)
-                } else {
-                    history.replace(`user-module/${success.user.uid}`)
-                }
-            });
-        }).catch((err) => {
-            setLoginLoader(false)
-            message.error(err.message, 5)
-        })
+      setLoginLoader(true)
+      axios.post('https://xfoil-technical-interview.herokuapp.com/login', {
+        username: values.email,
+        password: Number(values.password)
+      })
+      .then(function (response) {
+        if(response.status == 200){
+          history.push({
+            pathname: '/home',
+            state: { data: response.data }
+        });
+        }
+        setLoginLoader(false)
+      })
+      .catch(function (error) {
+        console.log(error);
+        setError("something went wrong")
+        setLoginLoader(false)
+      });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -45,6 +47,7 @@ const Login = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
+         {error && <Alert message={error} type="error" />}
             <Row>
                 <Col span={12} offset={6}>
                     <h1 className="heading">Login</h1>

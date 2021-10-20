@@ -2,47 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import Login from "./login/login"
-import Signup from "./signup/signup"
-import UserListing from "./admin/admin"
-import Parking from "./user/parking"
+import Home from "./home"
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { ProtectedRoutes } from './protected.route'
-import auth from './auth'
 
-const protectedRoutes = [
-    {
-        path: "/admin-module/:id",
-        component: UserListing
-    },
-    {
-        path: "/user-module/:id",
-        component: Parking
-    }
-]
-
-
-const protectedRoutesFun = () => {
-    const ele = protectedRoutes.map((el) => {
-        return (
-            <ProtectedRoutes
-                exact
-                path={el.path}
-                component={el.component} />
-        )
-    })
-    return ele
-}
 function App() {
     return (
         <div className="App">
             <Switch>
                 <Route exact path="/" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                {
-                    protectedRoutesFun()
-                 
-                }
-
+                <Route exact path="/home" component={Home} />
                 <Route path="*" component={() => "404 Not Found"} />
             </Switch>
         </div>
